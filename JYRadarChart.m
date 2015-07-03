@@ -9,7 +9,6 @@
 #import "JYRadarChart.h"
 #import "JYLegendView.h"
 
-#define PADDING 13
 #define LEGEND_PADDING 3
 #define ATTRIBUTE_TEXT_SIZE 10
 #define COLOR_HUE_STEP 5
@@ -44,8 +43,9 @@
 - (void)setDefaultValues {
     self.backgroundColor = [UIColor whiteColor];
     _maxValue = 100.0;
+    _labelPadding = 13.0;
     _centerPoint = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
-    _r = MIN(self.frame.size.width / 2 - PADDING, self.frame.size.height / 2 - PADDING);
+    [self calculateR];
     _steps = 1;
     _drawPoints = NO;
     _showLegend = NO;
@@ -55,6 +55,7 @@
     _colorOpacity = 1.0;
     _backgroundLineColorRadial = [UIColor darkGrayColor];
     _backgroundFillColor = [UIColor whiteColor];
+    _fontColor = [UIColor blackColor];
 
     _legendView = [[JYLegendView alloc] init];
     _legendView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -79,6 +80,18 @@
 		}
 	}
 }
+
+
+- (void)calculateR {
+    _r = MIN(self.frame.size.width / 2 - self.labelPadding, self.frame.size.height / 2 - self.labelPadding);
+}
+
+
+- (void)setLabelPadding:(CGFloat)labelPadding {
+    _labelPadding = labelPadding;
+    [self calculateR];
+}
+
 
 - (void)setTitles:(NSArray *)titles {
 	self.legendView.titles = titles;
@@ -145,7 +158,8 @@
             [paragraphStyle setAlignment:NSTextAlignmentCenter];
 
             NSDictionary *attributes = @{ NSFontAttributeName: self.scaleFont,
-                                          NSParagraphStyleAttributeName: paragraphStyle };
+                                          NSParagraphStyleAttributeName: paragraphStyle,
+                                          NSForegroundColorAttributeName: self.fontColor};
 
             [attributeName drawInRect:CGRectMake(legendCenter.x - width / 2.0,
                                                  legendCenter.y - height / 2.0,
@@ -224,7 +238,7 @@
 				                        _centerPoint.y - (value - _minValue) / (_maxValue - _minValue) * _r * cos(i * radPerV));
 			}
 		}
-		CGFloat value = [_dataSeries[serie][0] floatValue];
+		CGFloat value = [[_dataSeries[serie] firstObject] floatValue];
 		CGContextAddLineToPoint(context, _centerPoint.x, _centerPoint.y - (value - _minValue) / (_maxValue - _minValue) * _r);
         
 		if (self.fillArea) {
