@@ -265,7 +265,7 @@
 	}
     
 	if (self.showStepText) {
-		//draw step label text, alone y axis
+		//draw step label text, along y axis
 		//TODO: make this color a variable
 		[[UIColor blackColor] setFill];
 		for (int step = 0; step <= _steps; step++) {
