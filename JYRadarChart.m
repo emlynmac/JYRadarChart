@@ -168,13 +168,17 @@
                        withAttributes:attributes];
         }
         else {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineBreakMode = NSLineBreakByClipping;
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+            
             [attributeName drawInRect:CGRectMake(legendCenter.x - width / 2.0,
                                                  legendCenter.y - height / 2.0,
                                                  width,
                                                  height)
-                             withFont:self.scaleFont
-                        lineBreakMode:NSLineBreakByClipping
-                            alignment:NSTextAlignmentCenter];
+                       withAttributes:@{NSFontAttributeName: self.scaleFont,
+                                        NSParagraphStyleAttributeName: paragraphStyle
+                                        }];
         }
     }
 
