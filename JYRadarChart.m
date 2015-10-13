@@ -170,6 +170,19 @@
                                                  height)
                        withAttributes:attributes];
         }
+        else {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineBreakMode = NSLineBreakByClipping;
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+            
+            [attributeName drawInRect:CGRectMake(legendCenter.x - width / 2.0,
+                                                 legendCenter.y - height / 2.0,
+                                                 width,
+                                                 height)
+                       withAttributes:@{NSFontAttributeName: self.scaleFont,
+                                        NSParagraphStyleAttributeName: paragraphStyle
+                                        }];
+        }
     }
 
     //draw background fill color
